@@ -1,0 +1,715 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <title>Wrist Fracture Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .result {
+            background-color: #f1f1f1;
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        .result p {
+            font-size: 16px;
+            color: #333;
+        }
+        #loading {
+            display: none;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button-container button:hover {
+            background-color: #2980b9;
+        }
+        #previewReport {
+            margin-top: 20px;
+            background-color: #e0f7fa;
+            padding: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+          <div class="nav__logo">WristGuard</div>
+          <ul class="nav__links">
+            <li class="link"><a href="{{ url_for('home') }}">Home</a></li>
+            <li class="link"><a href="about.html">About Us</a></li>
+            <li class="link"><a href="index.html">Our Services</a></li>
+            <li class="link"><a href="{{ url_for('predict') }}">Heatmap</a></li>
+          </ul>
+        </nav>
+
+        <main>
+            <form id="upload-form" enctype="multipart/form-data">
+                <input type="file" name="file" accept="image/*" required />
+                <button type="submit">Upload and Predict</button>
+            </form>
+            
+            Loading indicator
+            <div id="loading">Loading...</div> -->
+
+            <!-- Display prediction result -->
+            <!-- <div id="result"></div> -->
+            
+            <!-- Preview and Download Button -->
+            <!-- <div class="button-container" id="button-container" style="display:none;">
+                <button id="downloadBtn">Download Report</button>
+                <button id="previewBtn">Preview Report</button>
+            </div> -->
+
+            <!-- Preview Report Section -->
+            <!-- <div id="previewReport"></div>
+        </main>
+
+        <footer class="footer">
+          <div class="container">
+            <p>&copy; 2025 WristGuard. All Rights Reserved.</p>
+          </div>
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const resultDiv = document.getElementById('result');
+        const loadingDiv = document.getElementById('loading');
+        const buttonContainer = document.getElementById('button-container');
+        const previewBtn = document.getElementById('previewBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const previewReportDiv = document.getElementById('previewReport');
+    
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+    
+            // Show loading
+            loadingDiv.style.display = 'block';
+            resultDiv.innerHTML = ''; // Clear previous results
+    
+            try {
+                const response = await fetch('http://127.0.0.1:5001/multi-predict', {
+                    method: 'POST',
+                    body: formData
+                });
+    
+                // Hide loading
+                loadingDiv.style.display = 'none';
+    
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // Ensure that the keys in the response match with these
+                    const fractureType = result['Fracture Type'] > 0.5 ? 'Complete Fracture' : 'Incomplete Fracture';
+                    const prognosisStatus = result['Prognosis Status'] > 0.8 ? 'Good' : 'Fair';
+                    const confidenceScore = (result['Confidence Score'] * 100).toFixed(2) + '%';
+                    const recoveryTime = result['Recovery Time Estimate'] > 0.5 ? '4-6 Weeks' : '6-8 Weeks';
+                    const treatment = result['Treatment Recommendation'] > 0.8 ? 'Splinting' : 'Surgery';
+                    const severity = result['Fracture Severity'] > 0.5 ? 'Mild' : 'Severe';
+    
+                    const report = `
+                        ========================
+                        Fracture Report
+                        ========================
+                        
+                        Fracture Type: ${fractureType}
+                        
+                        Prognosis Status: ${prognosisStatus}
+                        
+                        Confidence Score: ${confidenceScore}
+                        
+                        Recovery Time Estimate: ${recoveryTime}
+                        
+                        Treatment Recommendation: ${treatment}
+                        
+                        Fracture Severity: ${severity}
+                        
+                        ========================
+                        
+                        Please consult your healthcare provider for further advice.
+                    `;
+    
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            <h3>Prediction Results:</h3>
+                            <p><strong>Fracture Type:</strong> ${fractureType}</p>
+                            <p><strong>Prognosis Status:</strong> ${prognosisStatus}</p>
+                            <p><strong>Confidence Score:</strong> ${confidenceScore}</p>
+                            <p><strong>Recovery Time Estimate:</strong> ${recoveryTime}</p>
+                            <p><strong>Treatment Recommendation:</strong> ${treatment}</p>
+                            <p><strong>Fracture Severity:</strong> ${severity}</p>
+                        </div>
+                    `;
+                    
+                    // Show buttons to preview and download the report
+                    buttonContainer.style.display = 'block';
+    
+                    // Preview button click event
+                    previewBtn.onclick = () => {
+                        previewReportDiv.style.display = 'block';
+                        previewReportDiv.innerHTML = `<pre>${report}</pre>`;  // Display the report in the preview section with preserved whitespace
+                    };
+    
+                    // Download button click event
+                    downloadBtn.onclick = () => {
+                        const blob = new Blob([report], { type: 'text/plain' });
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'fracture_report.txt';
+                        link.click();
+                    };
+    
+                } else {
+                    const errorResult = await response.json();
+                    resultDiv.innerHTML = `<p style="color: red;">Error: ${errorResult.error}</p>`;
+                }
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                resultDiv.innerHTML = `<p style="color: red;">Error: Failed to load prediction data.</p>`;
+                console.error(error);
+            }
+        };
+    </script> --> 
+    
+<!-- </body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fracture Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .results {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            display: inline-block;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fracture Treatment and Recovery Prediction</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*">
+        <br>
+        <input type="submit" value="Predict">
+    </form>
+
+    {% if recovery_time and treatment %}
+        <div class="results">
+            <h2>Prediction Results:</h2>
+            <p><strong>Recovery Time:</strong> {{ recovery_time }}</p>
+            <p><strong>Treatment:</strong> {{ treatment }}</p>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+</body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Fracture Prediction</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{{ url_for('static', filename='css/remixicon.css') }}" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav__logo">WristGuard</div>
+            <ul class="nav__links">
+                <li class="link"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="link"><a href="about.html">About Us</a></li>
+                <li class="link"><a href="index.html">Our Services</a></li>
+                <li class="link"><a href="{{ url_for('map') }}">Heatmap</a></li>
+            </ul>
+        </nav>
+        <main>
+           
+            <h1>Fracture Prediction</h1>
+
+            {% if recovery_time and treatment and severity and fracture_type and prognosis %}
+                <h2>Prediction Results:</h2>
+                <p>Predicted Fracture Type: {{ fracture_type }}</p>
+                <p>Predicted Recovery Time: {{ recovery_time }}</p>
+                <p>Predicted Treatment: {{ treatment }}</p>
+                <p>Predicted Severity: {{ severity }}</p>
+                <p>Predicted Prognosis: {{ prognosis }}</p>
+                <a href="/">Predict Another Image</a>
+            {% elif error %}
+                <p style="color: red;">{{ error }}</p>
+                <a href="/">Try Again</a>
+            {% else %}
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" accept="image/*">
+                    <input type="submit" value="Predict"> 
+                </form>
+            {% endif %}
+
+        </main>
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2025 WristGuard. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fracture Prediction</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{{ url_for('static', filename='css/remixicon.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            background: white;
+            padding: 90px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+        h1 {
+            color: #333;
+        }
+
+        /* Navigation */
+        /* nav {
+            background: #007bff;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+        .nav__logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        .nav__links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .nav__links .link a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        } */
+
+        /* Form Styling */
+        form {
+            margin-top: 50px;
+            padding: 90px;
+            background: #e9ecef;
+            border-radius: 10px;
+        }
+        input[type="file"] {
+            display: block;
+            margin: 50px auto;
+            padding: 50px;
+        }
+        input[type="submit"] {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        input[type="submit"]:hover {
+            background: #0056b3;
+        }
+
+        /* Image Preview */
+        #imagePreviewSection {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        #imagePreview {
+            max-width: 400px; /* Fixed size for the preview image */
+            max-height: 400px; /* Fixed height for the preview image */
+            object-fit: contain; /* Ensures the image scales to fit the box */
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background: #218838;
+        }
+        .button.red {
+            background: #dc3545;
+        }
+        .button.red:hover {
+            background: #c82333;
+        }
+
+        /* Report Section */
+        #reportSection {
+            display: none;
+            background: white;
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        #reportContent {
+            white-space: pre-wrap;
+            font-family: "Courier New", Courier, monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            line-height: 2.0; /* Increased line height for better readability */
+        }
+
+        /* Footer */
+        /* .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border-radius: 0 0 10px 10px;
+        } */
+
+
+        /* Prediction Results Styling */
+        .results-container {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #8ab2dd, #b3e7f1);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .results-container h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .result-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .result-text {
+            font-size: 18px;
+        }
+
+        /* View & Download Buttons */
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background: #218838;
+        }
+
+        .button.red {
+            background: #dc3545;
+        }
+
+        .button.red:hover {
+            background: #c82333;
+        }
+
+        /* Report Section Styling */
+        #reportSection {
+            display: none;
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        #reportContent {
+            white-space: pre-wrap;
+            font-family: "Courier New", Courier, monospace;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav__logo">WristGuard</div>
+            <ul class="nav__links">
+                <li class="link"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="link"><a href="about.html">About Us</a></li>
+                <li class="link"><a href="index.html">Our Services</a></li>
+                <li class="link"><a href="{{ url_for('map') }}">Heatmap</a></li>
+            </ul>
+        </nav>
+
+        <main>
+                <h1>Fracture Prediction</h1>
+    
+                {% if recovery_time and treatment and severity and fracture_type and prognosis %}
+                    <div class="results-container">
+                        <h2>🩺 Prediction Results</h2>
+                        
+                        <div class="result-item">
+                            <span class="result-icon">🦴</span>
+                            <span class="result-text"><strong>Fracture Type:</strong> {{ fracture_type }}</span>
+                        </div>
+    
+                        <div class="result-item">
+                            <span class="result-icon">⏳</span>
+                            <span class="result-text"><strong>Recovery Time:</strong> {{ recovery_time }}</span>
+                        </div>
+    
+                        <div class="result-item">
+                            <span class="result-icon">💊</span>
+                            <span class="result-text"><strong>Treatment:</strong> {{ treatment }}</span>
+                        </div>
+    
+                        <div class="result-item">
+                            <span class="result-icon">⚠️</span>
+                            <span class="result-text"><strong>Severity:</strong> {{ severity }}</span>
+                        </div>
+    
+                        <div class="result-item">
+                            <span class="result-icon">📈</span>
+                            <span class="result-text"><strong>Prognosis:</strong> {{ prognosis }}</span>
+                        </div>
+    
+                        <button id="viewReportButton" class="button">📄 View Report</button>
+                        <button id="downloadReportButton" class="button red">⬇️ Download Report</button>
+                    </div>
+    
+                    <!-- Diagnosis Report Section -->
+                    <div id="reportSection">
+                        <h3>📝 Diagnosis Report</h3>
+                        <pre id="reportContent">
+                            =====================================
+                                    🦴 Fracture Report 🦴
+                            =====================================
+                            
+                            🩹 **Fracture Type**: {{ fracture_type }}
+                            🕒 **Recovery Time**: {{ recovery_time }}
+                            💉 **Treatment**: {{ treatment }}
+                            ⚠️ **Severity**: {{ severity }}
+                            🔮 **Prognosis**: {{ prognosis }}
+
+                            ======================================
+
+                        
+                        Please consult your healthcare provider for further advice.
+                        </pre>
+                    </div>
+                        
+                      
+                    <a href="/" class="button">🔄 Predict Another Image</a>
+                {% elif error %}
+                <p style="color: red; font-size: 16px; font-weight: bold; text-align: center; margin-bottom: 20px;">
+                    {{ error }}
+                </p>
+                <a href="/" style="display: inline-block; padding: 10px 20px; background-color: #f44336; color: white; text-decoration: none; border-radius: 5px; font-size: 14px; text-align: center;">
+                    Try Again
+                </a>
+                
+                {% else %}
+                    <form method="POST" enctype="multipart/form-data">
+                        <input type="file" name="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
+                        <input type="submit" value="Predict"> 
+                    </form>
+    
+                    <!-- Preview Image Section -->
+                    <div id="imagePreviewSection">
+                        <h3>Image Preview:</h3>
+                        <img id="imagePreview" src="#" alt="Image Preview">
+                    </div>
+                {% endif %}
+            </main>
+            <!-- <h1>Fracture Prediction</h1>
+
+            {% if recovery_time and treatment and severity and fracture_type and prognosis %}
+                <h2>Prediction Results:</h2>
+                <p><strong>Fracture Type:</strong> {{ fracture_type }}</p>
+                <p><strong>Recovery Time:</strong> {{ recovery_time }}</p>
+                <p><strong>Treatment:</strong> {{ treatment }}</p>
+                <p><strong>Severity:</strong> {{ severity }}</p>
+                <p><strong>Prognosis:</strong> {{ prognosis }}</p>
+                
+                <button id="viewReportButton" class="button">View Report</button>
+                <button id="downloadReportButton" class="button red">Download Report</button>
+
+                <div id="reportSection">
+                    <h3>Diagnosis Report</h3>
+                    <pre id="reportContent">
+Fracture Type: {{ fracture_type }}
+Recovery Time: {{ recovery_time }}
+Treatment: {{ treatment }}
+Severity: {{ severity }}
+Prognosis: {{ prognosis }}
+                    </pre>
+                </div>
+
+                <a href="/" class="button">Predict Another Image</a>
+            {% elif error %}
+                <p style="color: red;">{{ error }}</p>
+                <a href="/" class="button">Try Again</a>
+            {% else %}
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" id="fileInput" accept="image/*" onchange="previewImage(event)">
+                    <input type="submit" value="Predict"> 
+                </form>
+
+                <!- Preview Image Section -->
+                <!-- <div id="imagePreviewSection">
+                    <h3>Image Preview:</h3>
+                    <img id="imagePreview" src="#" alt="Image Preview">
+                </div>
+            {% endif %} -->
+            <!-- </main> -->
+
+        <footer class="footer">
+            <p>&copy; 2025 WristGuard. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Image Preview Function
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                document.getElementById('imagePreviewSection').style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // View Report Function
+        document.getElementById('viewReportButton')?.addEventListener('click', function () {
+            document.getElementById('reportSection').style.display = 'block';
+        });
+
+        // Download Report Function
+        document.getElementById('downloadReportButton')?.addEventListener('click', function () {
+            var reportText = document.getElementById('reportContent').innerText;
+            var blob = new Blob([reportText], { type: 'text/plain' });
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'fracture_report.txt';
+            link.click();
+        });
+    </script>
+</body>
+</html>

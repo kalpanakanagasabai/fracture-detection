@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <title>Fracture Detection System</title>
+    <style>
+      /* Add smooth scroll behavior */
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav>
+        <div class="nav__logo">WristGuard</div>
+        <ul class="nav__links">
+         
+            <li class="link"><a href="{{ url_for('home') }}">Home</a></li>
+            <li class="link"><a href="{{ url_for('about') }}">About Us</a></li>
+            <li class="link"><a href="{{ url_for('services') }}">Our Services</a></li>
+            <li class="link"><a href="{{ url_for('contact') }}">Start Prediction</a></li>
+            <a href="/multi-outputs">Go to Multi-Output Prediction</a>
+        </ul>
+        <button class="btn" onclick="window.location.href='contact_new.html';">Contact Us</button>
+      </nav>
+      <header class="header">
+        <div class="content">
+          <h1><span>Detect</span><br />Wrist Fractures</h1>
+          <p>
+            Upload your X-ray image to easily detect wrist fractures and get
+            accurate results. Our advanced fracture detection system helps
+            identify the type of fracture with high precision.
+          </p>
+          <a href="/sample">
+            <button class="btn bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+                Start Detection
+            </button>
+        </a>
+        
+        </div>
+        <div class="image">
+          <!-- <span class="image__bg"></span> -->
+          <img src="{{ url_for('static', filename='index2.jpg') }}" alt="Index Image">
+
+          <!-- <img src="templates\index2.jpg" alt="header image" /> -->
+          <!-- <div class="image__content image__content__1">
+            <span><i class="ri-user-3-line"></i></span>
+            <div class="details">
+              <h4>1500+</h4>
+              <p>Wrist Fractures Detected</p>
+            </div>
+          </div> -->
+          <div class="image__content image__content__2">
+            <ul>
+              <li>
+                <span><i class="ri-check-line"></i></span>
+                Accurate Detection of Fractures
+              </li>
+              <li>
+                <span><i class="ri-check-line"></i></span>
+                Quick Results with High Precision
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+
+      <main class="main">
+        <div class="container">
+          <!-- Services Section -->
+          <section id="services" class="services"> <!-- Added id="services" -->
+            <h2>Our Services</h2>
+            <div class="service-cards">
+              <div class="service-card">
+                <i class="ri-search-eye-line"></i>
+                <h3>Fracture Detection</h3>
+                <p>
+                  Upload your X-ray to quickly and accurately detect wrist
+                  fractures with our advanced AI system.
+                </p>
+              </div>
+              <div class="service-card">
+                <i class="ri-focus-3-line"></i>
+                <h3>Fracture Localization</h3>
+                <p>
+                  Get precise localization of fractures for better diagnosis and
+                  treatment planning.
+                </p>
+              </div>
+              <div class="service-card">
+                <i class="ri-list-check"></i>
+                <h3>Classification</h3>
+                <p>
+                  Classify fractures as complete, incomplete, or dislocation to
+                  assist medical professionals.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <div class="container">
+          <p>&copy; 2025 wristGuard. All Rights Reserved.</p>
+          <ul class="footer-links">
+            <li><a href="#privacy">Privacy Policy</a></li>
+            <li><a href="#terms">Terms of Service</a></li>
+          </ul>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

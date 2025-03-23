@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wrist Fracture Edge Detection</title>
+</head>
+<body>
+    <h2>Upload Wrist X-ray for Edge Detection</h2>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="image" name="image" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <h3>Processed Image:</h3>
+    <img id="output" src="" alt="Edge Detected Image" style="display:none; width:300px; border: 2px solid black;">
+
+    <p id="status"></p> <!-- Status Message for Debugging -->
+
+    <script>
+        document.getElementById("upload-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            let fileInput = document.getElementById("image");
+            if (fileInput.files.length === 0) {
+                document.getElementById("status").innerText = "Please select a file first!";
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append("image", fileInput.files[0]);
+
+            document.getElementById("status").innerText = "Uploading...";
+
+            try {
+                let response = await fetch("http://127.0.0.1:5000/upload", {  // Ensure Flask server is running
+                    method: "POST",
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to process image.");
+                }
+
+                let blob = await response.blob();
+                let imgUrl = URL.createObjectURL(blob);
+                
+                let outputImg = document.getElementById("output");
+                outputImg.src = imgUrl;
+                outputImg.style.display = "block";
+
+                document.getElementById("status").innerText = "Upload successful!";
+                outputImg.onload = () => URL.revokeObjectURL(imgUrl); // Free memory
+            } catch (error) {
+                document.getElementById("status").innerText = "Error: " + error.message;
+                console.error("Upload failed:", error);
+            }
+
+            
+        });
+    </script>
+</body>
+</html>

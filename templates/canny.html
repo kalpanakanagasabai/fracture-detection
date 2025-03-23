@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canny Edge Detection - WristGuard</title>
+    <link href="{{ url_for('static', filename='css/remixicon.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Main Section Styling */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: #444;
+        }
+
+        .form-container {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-container input[type="file"] {
+            padding: 1rem;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .form-container input[type="file"]:hover {
+            border-color: #00bcd4;
+            transform: scale(1.05);
+        }
+
+        .form-container input[type="submit"] {
+            padding: 1rem 3rem;
+            background-color: #00bcd4;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 188, 212, 0.2);
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #0097a7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 188, 212, 0.4);
+        }
+
+        /* Edge Detection Image Styling */
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 2rem;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Error Message Styling */
+        p {
+            color: red;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        /* Footer Styling */
+        footer p {
+            color: #fff;  /* Ensures the text remains white */
+            font-size: 1rem;
+            font-weight: normal;
+            margin-top: auto;
+        }
+
+        /* Reset Button Styling */
+        .reset-btn {
+            padding: 1rem 3rem;
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            margin-top: 2rem;
+            display: inline-block;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background-color: #e53935;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .form-container input[type="submit"] {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+
+            .form-container input[type="file"] {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav__logo">WristGuard</div>
+            <ul class="nav__links">
+                <li class="link"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="link"><a href="about.html">About Us</a></li>
+                <li class="link"><a href="index.html">Our Services</a></li>
+                <li class="link"><a href="{{ url_for('map') }}">Heatmap</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <h1>Canny Edge Detection</h1>
+
+            {% if image_data %}
+                <h2>Edge Detection Result:</h2>
+                <img src="data:image/png;base64,{{ image_data }}" alt="Canny Edges" id="imageResult">
+                <button class="reset-btn" id="resetBtn" onclick="window.location.href='/edge'">Reset</button>
+
+            {% elif error %}
+                <p>{{ error }}</p>
+            {% else %}
+                <div class="form-container" id="formContainer">
+                    <form method="POST" enctype="multipart/form-data">
+                        <input type="file" name="file" accept="image/*">
+                        <input type="submit" value="Apply Canny Edges" id="submitBtn">
+                    </form>
+                </div>
+            {% endif %}
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 WristGuard. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Function to reset the page to show the image upload form
+       // Function to reset the page to show the image upload form
+function resetPage() {
+    // Show the image upload form and reset the other elements
+    document.getElementById('formContainer').style.display = 'block'; // Show form
+    document.getElementById('imageResult').style.display = 'none'; // Hide the image result
+    document.getElementById('resetBtn').style.display = 'none'; // Hide the reset button
+    document.getElementById('submitBtn').style.display = 'inline'; // Show the submit button again
+    
+    // Clear file input field
+    document.querySelector('input[type="file"]').value = ""; // Clear the file input
+}
+
+
+        // Hide the submit button when the form is submitted and show the reset button
+        document.querySelector('form').addEventListener('submit', function() {
+            document.getElementById('submitBtn').style.display = 'none'; // Hide the submit button
+            document.getElementById('resetBtn').style.display = 'inline'; // Show the reset button
+            document.getElementById('formContainer').style.display = 'none'; // Hide the form
+        });
+    </script>
+</body>
+
+</html>

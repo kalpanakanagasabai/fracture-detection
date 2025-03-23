@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Styled Links</title>
+    <style>
+        .card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff7eb3, #ff758c, #ffa85c, #f4d03f);
+            border-radius: 20px;
+            filter: blur(10px);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-6">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        
+        <!-- Multi-Output Prediction -->
+        <a href="/multi-output" class="card flex flex-col items-center p-6 text-center">
+            <i data-lucide="layers" class="w-12 h-12 text-white mb-4"></i>
+            <span class="text-lg font-semibold text-white">Multi-Output Prediction</span>
+        </a>
+
+        <!-- Canny Edge -->
+        <a href="/edge" class="card flex flex-col items-center p-6 text-center">
+            <i data-lucide="crop" class="w-12 h-12 text-white mb-4"></i>
+            <span class="text-lg font-semibold text-white">Canny Edge</span>
+        </a>
+
+        <!-- Samples -->
+        <a href="/contact" class="card flex flex-col items-center p-6 text-center">
+            <i data-lucide="image" class="w-12 h-12 text-white mb-4"></i>
+            <span class="text-lg font-semibold text-white">Fracture classification</span>
+        </a>
+
+        <!-- Heatmap -->
+        <a href="/heatmap" class="card flex flex-col items-center p-6 text-center">
+            <i data-lucide="activity" class="w-12 h-12 text-white mb-4"></i>
+            <span class="text-lg font-semibold text-white">Mapping</span>
+        </a>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

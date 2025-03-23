@@ -1,0 +1,546 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="{{ url_for('static', filename='css/remixicon.css') }}"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <title>Upload & Predict</title>
+    <style>
+      /* General Section Styling */
+      .upload-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px;
+        background-color: #f9fafc;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+
+      /* Card Styling */
+      .upload-card {
+        display: flex;
+        flex-direction: row;
+        background: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        max-width: 1200px; /* Slightly increased the size */
+        width: 100%;
+        height: 650px; /* Increased height */
+      }
+
+      /* Left Side Image Styling */
+      .upload-card__image {
+        flex: 2.0; /* Adjusted width of the image section */
+        background-color: #f4f8ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        position: relative;
+      }
+
+      .upload-card__image .card-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        object-fit: cover; /* Makes the image cover the container */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .upload-card__image .card-image:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Right Side Form Styling */
+      .upload-card__form {
+        flex: 1.8; /* Adjusted form section width */
+        padding: 40px; /* Increased padding */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .upload-card__form h2 {
+        font-size: 1.8rem;
+        color: #28e898;
+        margin-bottom: 10px;
+      }
+
+      .upload-card__form p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 20px;
+      }
+
+      .upload-card__form form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .upload-card__form input[type="file"] {
+        border: 2px dashed #ddd;
+        padding: 15px;
+        width: 100%;
+        font-size: 1rem;
+        color: #555;
+        cursor: pointer;
+        background: #f9fafc;
+        border-radius: 8px;
+        transition: border-color 0.3s ease;
+      }
+
+      .upload-card__form input[type="file"]:hover {
+        border-color: #30a453;
+      }
+
+      .upload-card__form button {
+        background-color: #00ffb7;
+        color: #ffffff;
+        padding: 12px 20px;
+        font-size: 1.1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .upload-card__form button:hover {
+        background-color: #00b348;
+        transform: scale(1.05);
+      }
+
+      /* Result Message Styling */
+      .result {
+        margin-top: 20px;
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      .result.success {
+        color: #28a745;
+      }
+
+      .result.error {
+        color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <nav>
+        <div class="nav__logo">WristGuard</div>
+        <ul class="nav__links">
+          <li class="link"><a href="{{ url_for('home') }}">Home</a></li>
+          <li class="link"><a href="about.html">About Us</a></li>
+          <li class="link"><a href="index.html">Our Services</a></li>
+          <li class="link"><a href="{{ url_for('map') }}">Heatmap</a></li>
+
+        </ul>
+      </nav>
+      <main>
+        <div class="upload-section">
+          <div class="upload-card">
+            Left Side with Image Preview -->
+            <!-- <div class="upload-card__image">
+              <img
+              id="imagePreview"
+              class="card-image"
+              src="{{ url_for('static', filename='image.jpg') }}"
+              alt="X-Ray Preview"
+              />
+            </div>
+           
+
+
+            <-- Right Side with Form -->
+            <!-- <div class="upload-card__form">
+              <h2>Upload X-Ray Image</h2>
+              <p>Detect wrist fractures easily by uploading your X-ray image below.</p>
+              <form id="uploadForm" action="/predict" method="POST" enctype="multipart/form-data">
+                <input
+                  type="file"
+                  id="fileInput"
+                  name="file"
+                  accept="image/*"
+                  required
+                />
+                <button type="submit" id="uploadButton">Start Prediction</button>
+                <a href="/multi-output">Go to Multi-Output Prediction</a>
+                <a href="/heatmap">mapping</a>
+              </form>
+              <div id="result" class="result"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="footer">
+        <div class="container">
+          <p>&copy; 2025 WristGuard. All Rights Reserved.</p>
+        </div>
+      </footer>
+    </div> -->
+
+    <!-- JavaScript
+    <script> -->
+      <!-- // Handle image preview -->
+      <!-- const fileInput = document.getElementById("fileInput");
+      const imagePreview = document.getElementById("imagePreview");
+
+      fileInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            imagePreview.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          imagePreview.src = "";
+        }
+      });
+
+      // Handle form submission
+      const form = document.getElementById("uploadForm");
+      const resultDiv = document.getElementById("result");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (fileInput.files.length === 0) {
+          resultDiv.innerHTML = "<p class='error'>Please upload a file!</p>";
+          return;
+        }
+
+        resultDiv.innerHTML =
+          "<p class='success'>Predicting... Please wait.</p>";
+
+        // Form submission with fetch API
+        const formData = new FormData(form);
+
+        try {
+          const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch prediction');
+          }
+
+          const result = await response.json();
+
+          if (result.error) {
+            resultDiv.innerHTML = `<p class='error'>Error: ${result.error}</p>`;
+          } else {
+            resultDiv.innerHTML = `<p class='success'>Prediction complete! Fracture detected: ${result.prediction}</p>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = "<p class='error'>Error during prediction!</p>";
+        }
+      });
+    </script>
+  </body>
+</html>  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{{ url_for('static', filename='css/remixicon.css') }}" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <title>Upload & Predict</title>
+    <style>
+        /* General Section Styling */
+        .upload-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            background-color: #f9fafc;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Card Styling */
+        .upload-card {
+            display: flex;
+            flex-direction: row;
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+            height: 650px;
+        }
+
+        /* Left Side Image Styling */
+        .upload-card__image {
+            flex: 2.0;
+            background-color: #f4f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .upload-card__image .card-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .upload-card__image .card-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Right Side Form Styling */
+        .upload-card__form {
+            flex: 1.8;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .upload-card__form h2 {
+            font-size: 1.8rem;
+            color: #28e898;
+            margin-bottom: 10px;
+        }
+
+        .upload-card__form p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .upload-card__form form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .upload-card__form input[type="file"] {
+            border: 2px dashed #ddd;
+            padding: 15px;
+            width: 100%;
+            font-size: 1rem;
+            color: #555;
+            cursor: pointer;
+            background: #f9fafc;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        .upload-card__form input[type="file"]:hover {
+            border-color: #30a453;
+        }
+
+        .upload-card__form button {
+            background-color: #00ffb7;
+            color: #ffffff;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .upload-card__form button:hover {
+            background-color: #00b348;
+            transform: scale(1.05);
+        }
+
+        /* Result Message Styling */
+        .result {
+            margin-top: 20px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .result.success {
+            color: #28a745;
+        }
+
+        .result.error {
+            color: #dc3545;
+        }
+
+        /* Styling for Prediction Links */
+      .prediction-links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 20px;
+      }
+
+      .prediction-links a {
+          display: inline-block;
+          background-color: #007bff; /* Blue color */
+          color: #fff;
+          text-decoration: none;
+          padding: 10px 15px;
+          border-radius: 8px;
+          font-size: 1rem;
+          font-weight: bold;
+          text-align: center;
+          transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .prediction-links a:hover {
+          background-color: #0056b3; /* Darker blue */
+          transform: scale(1.05);
+      }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="nav__logo">WristGuard</div>
+            <ul class="nav__links">
+                <li class="link"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="link"><a href="about.html">About Us</a></li>
+                <li class="link"><a href="index.html">Our Services</a></li>
+                <li class="link"><a href="{{ url_for('map') }}">Heatmap</a></li>
+            </ul>
+        </nav>
+        <main>
+            <div class="upload-section">
+                <div class="upload-card">
+                    <div class="upload-card__image">
+                        <img id="imagePreview" class="card-image" src="{{ url_for('static', filename='image.jpg') }}" alt="X-Ray Preview" />
+                    </div>
+                    <div class="upload-card__form">
+                        <h2>Upload X-Ray Image</h2>
+                        <p>Detect wrist fractures easily by uploading your X-ray image below.</p>
+                        <form id="uploadForm" action="/predict" method="POST" enctype="multipart/form-data">
+                            <input type="file" id="fileInput" name="file" accept="image/*" required />
+                            <button type="submit" id="uploadButton">Start Prediction</button>
+
+                            <h1>Proceed Further </h1>
+                            
+                            <!-- <a href="/multi-output" class="styled-link">Go to Multi-Output Prediction</a>
+                            <a href="/edge" class="styled-link">Canny Edge</a>
+                            <a href="/sample" class="styled-link">Samples</a>
+                            <a href="/heatmap" class="styled-link">Mapping</a> -->
+
+                        </form>
+
+
+                        <!-- Move the links outside the form -->
+                        <!-- <div class="prediction-links">
+                          <a href="/multi-output">Go to Multi-Output Prediction</a>
+                          <a href="/edge">Canny Edge</a>
+                          <a href="/sample">Samples</a>
+                          <a href="/heatmap">Mapping</a>
+                        </div> -->
+
+                        <div id="result" class="result"></div>
+                        <div id="recoveryTime" class="result"></div>
+                        <div id="treatmentPlan" class="result"></div>
+
+
+                        <a href="/sample">
+                          <button class="btn bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+                              Further Detection
+                          </button>
+                        </a>
+                    </div>
+
+                    
+                    
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2025 WristGuard. All Rights Reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+
+const fileInput = document.getElementById("fileInput");
+const imagePreview = document.getElementById("imagePreview");
+
+fileInput.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imagePreview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        imagePreview.src = "";
+    }
+});
+
+// Handle form submission
+const form = document.getElementById("uploadForm");
+const resultDiv = document.getElementById("result");
+const recoveryTimeDiv = document.getElementById("recoveryTime");
+const treatmentPlanDiv = document.getElementById("treatmentPlan");
+
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (fileInput.files.length === 0) {
+        resultDiv.innerHTML = "<p class='error'>Please upload a file!</p>";
+        return;
+    }
+
+    resultDiv.innerHTML = "<p class='success'>Predicting... Please wait.</p>";
+    recoveryTimeDiv.innerHTML = "";
+    treatmentPlanDiv.innerHTML = "";
+
+    // Form submission with fetch API
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch prediction');
+        }
+
+        const result = await response.json();
+
+        if (result.error) {
+            resultDiv.innerHTML = `<p class='error'>Error: ${result.error}</p>`;
+        } else {
+            resultDiv.innerHTML = `<p class='success'>Fracture detected: ${result.prediction}</p>`;
+        }
+    } catch (error) {
+        resultDiv.innerHTML = "<p class='error'>Error during prediction!</p>";
+    }
+});
+</script>
+
+
+</body>
+</html>
+                

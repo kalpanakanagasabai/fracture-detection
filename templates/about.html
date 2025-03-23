@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+        /* About Section */
+        .about {
+            background: url(aboutUs.jpg) no-repeat left;
+            background-size: 55%;
+            background-color: #fdfdfd;
+            overflow: hidden;
+            padding: 100px 0;
+            margin-top: 60px; /* To avoid the header overlap */
+        }
+        
+        .inner-section {
+            width: 55%;
+            float: right;
+            background-color: #fdfdfd;
+            padding: 140px;
+            box-shadow: 10px 10px 8px rgba(0,0,0,0.3);
+        }
+        
+        .inner-section h1 {
+            margin-bottom: 30px;
+            font-size: 30px;
+            font-weight: 900;
+        }
+        
+        .text {
+            font-size: 13px;
+            color: #545454;
+            line-height: 30px;
+            text-align: justify;
+            margin-bottom: 40px;
+        }
+        
+        .skills button {
+            font-size: 22px;
+            text-align: center;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 20px;
+            padding: 8px;
+            width: 200px;
+            background-color: #00999c;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .skills button:hover {
+            transition: 1s;
+            background-color: #ecf5f5;
+            color: #00999c;
+        }</style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav__logo">WristGuard</div>
+        <ul class="nav__links">
+          <li class="link"><a href="index.html">Home</a></li>
+          <li class="link"><a href="about.html">About Us</a></li>
+          <li class="link"><a href="index.html">Our Services</a></li> <!-- Updated -->
+          <li class="link"><a href="contact.html">Start Prediction</a></li>
+        </ul>
+        <button class="btn" onclick="window.location.href='contact_new.html';">Contact Us</button>
+      </nav>
+
+    <!-- About Us Section -->
+    <div class="about">
+        <div class="inner-section">
+            <h1>About Us</h1>
+            <p class="text">
+                Our Wrist Fracture Detection System is designed to assist healthcare professionals by automating the detection and classification of wrist fractures using advanced deep learning technology. The system analyzes X-ray images to:
+
+                Detect fractures with high accuracy.
+                Classify fractures into types such as complete, incomplete, and dislocations.
+                Identify specific fracture names, like scaphoid or Colles fractures.
+                This innovative tool aims to improve diagnostic efficiency, reduce human error, and support better treatment planning.
+            </p>
+            <div class="skills">
+                <button>LERAN MORE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <h3>Fracture Detection System</h3>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+            <div class="footer-socials">
+                <a href="#"><i class="ri-facebook-circle-line"></i></a>
+                <a href="#"><i class="ri-twitter-line"></i></a>
+                <a href="#"><i class="ri-instagram-line"></i></a>
+            </div>
+            <div class="footer-copy">
+                <p>&copy; 2025 Fracture Detection System. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

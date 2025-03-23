@@ -1,0 +1,347 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Heatmap</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{{ url_for('static', filename='css/remixicon.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <div class="nav__logo">WristGuard</div>
+            <ul class="nav__links">
+                <li class="link"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="link"><a href="about.html">About Us</a></li>
+                <li class="link"><a href="index.html">Our Services</a></li>
+                <li class="link"><a href="{{ url_for('map') }}">Heatmap</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <h1>Heatmap</h1>
+            <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                <input type="file" name="file" id="fileInput">
+                <input type="submit" value="Upload">
+            </form>
+        
+            <div id="errorMessage" style="color: red;"></div>
+        
+            {% if original_image and processed_image and heatmap_image %}
+                <h2>Original Image</h2>
+                <img src="data:image/png;base64,{{ original_image }}" alt="Original Image">
+        
+                <h2>Processed Image</h2>
+                <img src="data:image/png;base64,{{ processed_image }}" alt="Processed Image">
+        
+                <h2>Heatmap Image</h2>
+                <img src="data:image/png;base64,{{ heatmap_image }}" alt="Heatmap">
+            {% endif %}
+        
+            </main>
+        
+
+        <footer class="footer">
+            <p>&copy; 2025 WristGuard. All Rights Reserved.</p>
+        </footer>
+    </div>
+   
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            const fileInput = document.getElementById('fileInput');
+            const errorMessageDiv = document.getElementById('errorMessage');
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const allowedExtensions = /(\.png|\.jpg|\.jpeg|\.gif|\.bmp|\.dcm)$/i; // Add .dcm for DICOM if needed
+                if (!allowedExtensions.exec(file.name)) {
+                    errorMessageDiv.textContent = 'Error: Please upload only X-ray image files (png, jpg, jpeg, gif, bmp, dcm).';
+                    event.preventDefault(); // Prevent form submission
+                    return false;
+                } else {
+                    errorMessageDiv.textContent = ''; // Clear any previous error messages.
+                    return true;
+                }
+            } else {
+                errorMessageDiv.textContent = 'Please select a file to upload.';
+                event.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Heatmap</title>
+    <link href="{{ url_for('static', filename='css/remixicon.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* nav {
+            background-color: #34495e;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav__logo {
+            font-size: 26px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .nav__links {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav__links li {
+            margin-left: 25px;
+        }
+
+        .nav__links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .nav__links a:hover {
+            color: #3498db;
+        } */
+
+        main {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        #errorMessage {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .image-container div {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            padding: 15px;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        
+        /* .heatmap-container {
+    width: 100%;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 15px;
+    margin-top: 20px;
+    overflow: hidden;  
+    }
+
+
+
+/* 
+
+.heatmap-container img:hover {
+    transform: scale(1.2);  
+} */
+.heatmap-container {
+    width: 100%;  /* Ensure container takes up full width */
+    height: auto;  /* Allow the container height to adjust based on content */
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 15px;
+    margin-top: 20px;
+    overflow: hidden;  /* Hide any content that overflows the container */
+    position: relative; /* To position the image inside */
+}
+
+.heatmap-container img {
+    width: 200%;  /* Set image width to 200% of the container's width */
+    height: auto;  /* Maintain aspect ratio */
+    max-height: 95vh;  /* Limit the height to 95% of the viewport height */
+    border-radius: 8px;  /* Round corners of the image */
+    object-fit: contain;  /* Ensure the image stays within the bounds of the container */
+    transition: transform 0.3s ease-in-out;  /* Smooth zoom effect */
+    transform-origin: center center;  /* Zoom effect occurs from the center */
+    transform: scale(1);  /* Default scale */
+    position: absolute;  /* Allow for positioning within the container */
+    left: 50%;  /* Position image at the center horizontally */
+    top: 50%;  /* Position image at the center vertically */
+    transform: translate(-50%, -50%) scale(1);  /* Center image and set scale */
+}
+
+
+
+        /* footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #34495e;
+            color: #fff;
+            margin-top: 40px;
+            border-radius: 8px;
+        } */
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <div class="nav__logo">WristGuard</div>
+            <ul class="nav__links">
+                <li class="link"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="link"><a href="about.html">About Us</a></li>
+                <li class="link"><a href="index.html">Our Services</a></li>
+                <li class="link"><a href="{{ url_for('map') }}">Heatmap</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <h1>Heatmap</h1>
+            <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                <input type="file" name="file" id="fileInput">
+                <input type="submit" value="Upload">
+            </form>
+        
+            <div id="errorMessage"></div>
+        
+            {% if original_image and processed_image and heatmap_image %}
+                <div class="image-container">
+                    <div>
+                        <h2>Original Image</h2>
+                        <img src="data:image/png;base64,{{ original_image }}" alt="Original Image">
+                    </div>
+        
+                    <!-- <div>
+                        <h2>Processed Image</h2>
+                        <img src="data:image/png;base64,{{ processed_image }}" alt="Processed Image">
+                    </div> -->
+        
+                    <div class="heatmap-container">
+                        <h2>Heatmap Image</h2>
+                        <img src="data:image/png;base64,{{ heatmap_image }}" alt="Heatmap">
+                    </div>
+                </div>
+            {% endif %}
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 WristGuard. All Rights Reserved.</p>
+        </footer>
+    </div>
+   
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            const fileInput = document.getElementById('fileInput');
+            const errorMessageDiv = document.getElementById('errorMessage');
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const allowedExtensions = /(\.png|\.jpg|\.jpeg|\.gif|\.bmp|\.dcm)$/i;
+                if (!allowedExtensions.exec(file.name)) {
+                    errorMessageDiv.textContent = 'Error: Please upload only X-ray image files (png, jpg, jpeg, gif, bmp, dcm).';
+                    event.preventDefault(); // Prevent form submission
+                    return false;
+                } else {
+                    errorMessageDiv.textContent = ''; // Clear any previous error messages.
+                    return true;
+                }
+            } else {
+                errorMessageDiv.textContent = 'Please select a file to upload.';
+                event.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+</body>
+</html>
