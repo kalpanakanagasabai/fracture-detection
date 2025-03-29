@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Manual - Fracture Detection System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/introjs.min.css">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e0f7fa, #c2e9fb);
+            color: #333;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 850px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        .container:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        h1, h2 {
+            color: #2979ff;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #b3e5fc;
+            padding-bottom: 15px;
+            font-weight: 700;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        ol, ul {
+            margin-left: 25px;
+        }
+        ol li::before {
+            content: "→ ";
+            color: #2979ff;
+            font-weight: bold;
+        }
+        ul li::before {
+            content: "• ";
+            color: #2979ff;
+            font-weight: bold;
+        }
+        .step, .service, .trouble, .contact {
+            font-weight: 600;
+            color: #262626;
+        }
+        .box {
+            background: rgba(240, 248, 255, 0.8);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+        p {
+            color: #4a4a4a;
+            font-size: 16px;
+        }
+        .icon {
+            margin-right: 12px;
+            color: #2979ff;
+            font-size: 1.2em;
+        }
+        strong {
+            color: #1e88e5;
+        }
+        .accordion {
+            background-color: #f0f8ff;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            transition: 0.4s;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .active, .accordion:hover {
+            background-color: #d1e8ff;
+        }
+        .accordion:after {
+            content: '\002B';
+            color: #777;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+        .active:after {
+            content: "\2212";
+        }
+        .panel {
+            padding: 0 18px;
+            background-color: white;
+            display: none;
+            overflow: hidden;
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 20px;
+        }
+        .start-tutorial-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .start-tutorial-btn:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+        }
+        .start-tutorial-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .close-manual-btn{
+            background-color: #f44336;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-book-open icon"></i> Ultimate Guide: Fracture Detection System</h1>
+        <button class="start-tutorial-btn" onclick="startIntro()">Start Tutorial</button>
+
+        <section class="box" data-intro="Welcome to the Fracture Detection System user manual.">
+            <h2><i class="fas fa-info-circle icon"></i> Welcome to Precision Analysis!</h2>
+            <p>Embark on a seamless journey with our Fracture Detection System. This guide unveils how to harness AI's power for <strong>accurate and efficient</strong> fracture analysis, transforming medical diagnostics.</p>
+        </section>
+
+        <section class="box" data-intro="Create or access your account here.">
+            <h2><i class="fas fa-rocket icon"></i> Quick Start: Your Diagnostic Companion</h2>
+            <ol>
+                <li><span class="step"><i class="fas fa-user icon"></i> Account Setup:</span> Dive in by creating or accessing your secure account.</li>
+                <li><span class="step"><i class="fas fa-compass icon"></i> Navigate Smartly:</span> Discover our intuitive menu for streamlined system access.</li>
+            </ol>
+        </section>
+
+        <section class="box" data-intro="Upload your X-ray images for analysis.">
+            <h2><i class="fas fa-search icon"></i> Mastering Fracture Analysis</h2>
+            <ol>
+                <li><span class="step"><i class="fas fa-upload icon"></i> Instant Upload:</span> Select and upload X-ray images with ease.</li>
+                <li><span class="step"><i class="fas fa-cog icon"></i> AI-Powered Processing:</span> Submit for advanced, AI-driven diagnostics.</li>
+                <li><span class="step"><i class="fas fa-file-alt icon"></i> Detailed Reports:</span> Access and interpret comprehensive analysis results.</li>
+            </ol>
+        </section>
+
+        <section class="box" data-intro="Learn about the system's capabilities.">
+            <h2><i class="fas fa-tools icon"></i> Unlock System Capabilities</h2>
+            <ul>
+                <li><span class="service"><i class="fas fa-eye icon"></i> Smart Detection:</span> Identify potential fractures with unparalleled accuracy.</li>
+                <li><span class="service"><i class="fas fa-map-marker-alt icon"></i> Precise Localization:</span> Pinpoint fracture locations for targeted diagnosis.</li>
+                <li><span class="service"><i class="fas fa-list-ul icon"></i> Expert Classification:</span> Categorize fracture types with detailed insights.</li>
+            </ul>
+        </section>
+
+        <section class="box">
+            <h2><i class="fas fa-exclamation-triangle icon"></i> Navigate Challenges Effortlessly</h2>
+            <button class="accordion">Upload Issues</button>
+            <div class="panel">
+                <p>Ensure your X-ray images are in JPEG, PNG, or DICOM format. Large files may take longer to upload. Check your internet connection.</p>
+            </div>
+            <button class="accordion">System Errors</button>
+            <div class="panel">
+                <p>If you encounter an error message, please note the error code and report it to our support team at support@fracturedetection.com. Include screenshots if possible.</p>
+            </div>
+        </section>
+
+        <section class="box">
+            <h2><i class="fas fa-envelope icon"></i> Connect with Our Experts</h2>
+            <p><span class="contact"><i class="fas fa-envelope icon"></i> Email:</span> support@fracturedetection.com - We're here to assist you!</p>
+        </section>
+
+        <button class="close-manual-btn" onclick="closeManual()">Close User Manual</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.min.js"></script>
+    <script>
+        function startIntro() {
+            introJs().start();
+        }
+
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+        function closeManual() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
